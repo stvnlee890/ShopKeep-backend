@@ -9,7 +9,7 @@ const ImageFileSchema = new mongoose.Schema({
   imageUrl: String,
 },
 {
-  owner: {
+  storeFront: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'StoreFront',
     required: true,

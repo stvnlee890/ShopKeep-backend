@@ -26,5 +26,7 @@ const StoreFrontSchema = new mongoose.Schema({
   timestamps: true,
 })
 
+
+
 const StoreFront = mongoose.model('StoreFront', StoreFrontSchema);
 module.exports = StoreFront;

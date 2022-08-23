@@ -13,6 +13,14 @@ router.get('/', async (req, res, next) => {
 })
 
 // GET SPECIFIC 
+router.get('/admin/:id', async (req, res, next) => {
+  try {
+    const store = await StoreFront.findById(req.params.id)
+    res.json(store)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // POST
 router.post('/admin', async (req, res, next) => {
@@ -23,6 +31,22 @@ router.post('/admin', async (req, res, next) => {
     next(err);
   }
 });
+
+// EDIT
+router.put('/admin/:id', async (req, res, next) => {
+  try {
+    const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, req.body, {
+      new: true,
+    })
+    if(editStore) {
+      res.json(editStore)
+    } else {
+      res.sendStatus(404)
+    }
+  } catch(err) {
+    next(err)
+  }
+})
 
 // DELETE
 router.delete('/admin/:id', async (req, res, next) => {

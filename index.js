@@ -20,6 +20,8 @@ app.get('/', (req, res) => {
 const storeFrontController = require('./controllers/StoreFrontController');
 app.use('/store-front', storeFrontController)
 
+const ImageFileController = require('./controllers/ImageFileController');
+app.use('/images', ImageFileController)
 
 // SERVER
 app.listen(app.get('port'), () => {
