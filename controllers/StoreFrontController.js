@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const StoreFront = require('../models/StoreFront');
+const { requireToken } = require('../middleware/auth')
 
 // GET 'url/adminName/storeFront
 router.get('/', async (req, res, next) => {
@@ -23,7 +24,7 @@ router.get('/admin/:id', async (req, res, next) => {
 })
 
 // POST
-router.post('/admin', async (req, res, next) => {
+router.post('/admin', requireToken, async (req, res, next) => {
   try {
     const newStore = await StoreFront.create(req.body)
     res.status(201).json(newStore);

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User')
+const bcrypt = require('bcrypt');
+const { createUserToken } = require('../middleware/auth')
 
 // GET ALL USERS 'user/
 router.get('/', async (req, res, next) => {
@@ -21,11 +23,22 @@ router.get('/:id', async (req, res, next) => {
     next(err)
   }
 })
-
-// POST USER
-router.post('/', async (req, res, next) => {
+// POST FOR LOGIN
+router.post('/login', async (req, res, next) => {
   try {
-    const newUser = await User.create(req.body);
+    const user = await User.findOne({ email: req.body.email } || { username: req.body.username })
+    const token = await createUserToken(req, user)
+    res.status(201).json({ token })
+  } catch(err) {
+    next(err)
+  }
+})
+
+// POST NEW USER with hashed pw
+router.post('/signup', async (req, res, next) => {
+  try {
+    const password = await bcrypt.hash(req.body.password, 10);
+    const newUser = await User.create({ ...req.body, password});
     res.status(201).json(newUser);
   } catch(err) {
     next(err)
