@@ -7,6 +7,16 @@ const ImageFileSchema = new mongoose.Schema({
   },
   description: String,
   imageUrl: String,
+},
+{
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'StoreFront',
+    required: true,
+  }
+},
+{
+  timestamps: true,
 })
 
 const ImageFile = mongoose.model('ImageFile', ImageFileSchema);

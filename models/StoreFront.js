@@ -2,8 +2,8 @@ const mongoose = require('../db/connection');
 const ImageFile = require('./ImageFile')
 
 const StoreFrontSchema = new mongoose.Schema({
-  image : {
-    type: String,
+  imageUrl : {
+    type: [String],
     required: true,
   },
   price: {
@@ -14,6 +14,16 @@ const StoreFrontSchema = new mongoose.Schema({
   color: String,
   description: String,
   category: String,
+},
+{
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  }
+},
+{
+  timestamps: true,
 })
 
 const StoreFront = mongoose.model('StoreFront', StoreFrontSchema);
