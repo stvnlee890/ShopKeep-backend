@@ -5,7 +5,7 @@ const StoreFront = require('../models/StoreFront');
 // GET 'url/adminName/storeFront
 router.get('/', async (req, res, next) => {
   try {
-    const store = await StoreFront.find({})
+    const store = await StoreFront.find({}).populate('User')
     res.json(store);
   } catch (err) {
     next(err)

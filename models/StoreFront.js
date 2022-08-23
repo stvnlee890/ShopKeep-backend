@@ -1,5 +1,4 @@
 const mongoose = require('../db/connection');
-const ImageFile = require('./ImageFile')
 
 const StoreFrontSchema = new mongoose.Schema({
   imageUrl : {
@@ -14,13 +13,11 @@ const StoreFrontSchema = new mongoose.Schema({
   color: String,
   description: String,
   category: String,
-},
-{
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-  }
+  },
 },
 {
   timestamps: true,

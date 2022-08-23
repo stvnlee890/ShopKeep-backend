@@ -23,6 +23,9 @@ app.use('/store-front', storeFrontController)
 const ImageFileController = require('./controllers/ImageFileController');
 app.use('/images', ImageFileController)
 
+const UserController = require('./controllers/UserController');
+app.use('/user', UserController)
+
 // SERVER
 app.listen(app.get('port'), () => {
   console.log(`|| PORT: ${app.get('port')} ||`);

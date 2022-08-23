@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 // GET BY ID
 router.get('/:id', async (req, res, next) => {
   try {
-    const images = await ImageFile.findById(req.params.id).populate('storeFront')
+    const images = await ImageFile.findById(req.params.id).populate('images')
     res.status(200).json(images)
   } catch (err) {
     next(err)
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res, next) => {
 // POST
 router.post('/', async (req, res, next) => {
   try {
-    const newImage = await ImageFile.create(req.body);
+    const newImage = await (await ImageFile.create(req.body));
     res.status(201).json(newImage)
   } catch (err) {
     next(err)
