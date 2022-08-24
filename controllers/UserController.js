@@ -27,8 +27,13 @@ router.get('/:id', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email } || { username: req.body.username })
-    const token = await createUserToken(req, user)
-    res.status(201).json({ token })
+    console.log(user)
+    if(user.isAdmin === true){
+      const token = await createUserToken(req, user)
+      res.status(201).json({ token, user }) 
+    } else {
+      res.json({ user })
+    }
   } catch(err) {
     next(err)
   }

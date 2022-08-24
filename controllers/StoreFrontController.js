@@ -13,8 +13,8 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// GET SPECIFIC 
-router.get('/admin/:id', async (req, res, next) => {
+// GET SPECIFIC {require token on this route for testing purpose}
+router.get('/admin/:id', requireToken, async (req, res, next) => {
   try {
     const store = await StoreFront.findById(req.params.id)
     res.json(store)
@@ -34,7 +34,7 @@ router.post('/admin', requireToken, async (req, res, next) => {
 });
 
 // EDIT
-router.put('/admin/:id', async (req, res, next) => {
+router.put('/admin/:id', requireToken, async (req, res, next) => {
   try {
     const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
@@ -50,7 +50,7 @@ router.put('/admin/:id', async (req, res, next) => {
 })
 
 // DELETE
-router.delete('/admin/:id', async (req, res, next) => {
+router.delete('/admin/:id', requireToken, async (req, res, next) => {
   try {
     const deleteStore = await StoreFront.findByIdAndDelete(req.params.id);
     res.json(deleteStore)

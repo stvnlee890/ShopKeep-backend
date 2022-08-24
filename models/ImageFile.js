@@ -26,10 +26,10 @@ const ImageFileSchema = new mongoose.Schema({
   },
   description: String,
   imageUrl: String,
-//   storeFront: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'StoreFront',
-// },
+  storeFront: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'StoreFront',
+},
 },
 {
   timestamps: true,
