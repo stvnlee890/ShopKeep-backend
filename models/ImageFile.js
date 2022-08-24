@@ -20,11 +20,10 @@ const mongoose = require('../db/connection');
 // })
 
 const ImageFileSchema = new mongoose.Schema({
-  imageName: {
+  imageKey: {
     type: String,
     required: true,
   },
-  description: String,
   imageUrl: String,
   storeFront: {
     type: mongoose.Schema.Types.ObjectId,

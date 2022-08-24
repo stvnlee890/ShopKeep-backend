@@ -1,10 +1,11 @@
 const mongoose = require('../db/connection');
 
+
 const StoreFrontSchema = new mongoose.Schema({
-  imageUrl : {
-    type: [String],
-    required: true,
-  },
+  imageUrl : [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ImageFile',
+  }],
   price: {
     type: Number,
     required: true,
@@ -16,7 +17,6 @@ const StoreFrontSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
   },
 },
 {

@@ -6,7 +6,7 @@ const { requireToken } = require('../middleware/auth')
 // GET 'url/adminName/storeFront
 router.get('/', async (req, res, next) => {
   try {
-    const store = await StoreFront.find({}).populate('User')
+    const store = await StoreFront.find({})
     res.json(store);
   } catch (err) {
     next(err)
@@ -14,10 +14,10 @@ router.get('/', async (req, res, next) => {
 })
 
 // GET SPECIFIC {require token on this route for testing purpose}
-router.get('/admin/:id', requireToken, async (req, res, next) => {
+router.get('/admin/:id', async (req, res, next) => {
   try {
-    const store = await StoreFront.findById(req.params.id)
-    res.json(store)
+    const store = await StoreFront.findById(req.params.id).populate('owner')
+    res.status(200).json(store)
   } catch (err) {
     next(err)
   }
@@ -26,7 +26,7 @@ router.get('/admin/:id', requireToken, async (req, res, next) => {
 // POST
 router.post('/admin', requireToken, async (req, res, next) => {
   try {
-    const newStore = await StoreFront.create(req.body)
+    const newStore = await (await StoreFront.create(req.body)).populate('owner')
     res.status(201).json(newStore);
   } catch (err) {
     next(err);
@@ -34,11 +34,12 @@ router.post('/admin', requireToken, async (req, res, next) => {
 });
 
 // EDIT
-router.put('/admin/:id', requireToken, async (req, res, next) => {
+// FOR NOW DON'T REQUIRE TOKEN
+router.put('/admin/:id', async (req, res, next) => {
   try {
     const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
-    })
+    }).populate('imageUrl')
     if(editStore) {
       res.json(editStore)
     } else {
