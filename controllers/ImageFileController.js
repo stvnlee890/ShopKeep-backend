@@ -32,8 +32,8 @@ const memoryStorage = multer.memoryStorage()
 const upload = multer({ storage: memoryStorage })
 
 // GET IMAGES WITH PRESIGNED URL
-router.get('/', async (req, res) => {
-  const posts = await ImageFile.find({}).populate('storeFront')
+router.get('/:storeid', async (req, res) => {
+  const posts = await ImageFile.find({storeFront: req.params.storeid})
 
   for (const post of posts) {
     const getObjectParams = {
@@ -64,11 +64,9 @@ router.post('/', upload.single('image'), async (req, res) => {
 
   const command = new PutObjectCommand(params)
   await s3.send(command)
-  
-  const postImage = await ImageFile.create({
-    ...req.body,
-    imageKey: randomImageKey,
-   })
+
+  const postImage = await ImageFile.create({...req.body, imageKey: randomImageKey })
+  const populate = await postImage.populate('storeFront')
    res.sendStatus(201)
 })
 

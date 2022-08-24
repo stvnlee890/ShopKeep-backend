@@ -26,7 +26,8 @@ router.get('/admin/:id', async (req, res, next) => {
 // POST
 router.post('/admin', requireToken, async (req, res, next) => {
   try {
-    const newStore = await (await StoreFront.create(req.body)).populate('owner')
+    const newStore = await StoreFront.create(req.body)
+    const populate = await newStore.populate('owner')
     res.status(201).json(newStore);
   } catch (err) {
     next(err);
@@ -39,7 +40,7 @@ router.put('/admin/:id', async (req, res, next) => {
   try {
     const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
-    }).populate('imageUrl')
+    })
     if(editStore) {
       res.json(editStore)
     } else {
