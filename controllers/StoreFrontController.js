@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 // GET STORES ASSOCIATED WITH PARTICULAR USER
 router.get('/:id', async (req, res, next) => {
   try {
-    const store = await StoreFront.find({owner: req.params.id})
+    const store = await StoreFront.find({username: req.params.id})
     for (const id of store) {
       console.log(id._id)
     }

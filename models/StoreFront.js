@@ -15,6 +15,7 @@ const StoreFrontSchema = new mongoose.Schema({
   color: String,
   description: String,
   category: String,
+  username: String,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
