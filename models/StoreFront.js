@@ -2,10 +2,11 @@ const mongoose = require('../db/connection');
 
 
 const StoreFrontSchema = new mongoose.Schema({
-  imageUrl : [{
+  storeName: String,
+  imageUrl : {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ImageFile',
-  }],
+  },
   price: {
     type: Number,
     required: true,

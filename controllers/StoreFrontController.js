@@ -13,6 +13,19 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// GET STORES ASSOCIATED WITH PARTICULAR USER
+router.get('/:id', async (req, res, next) => {
+  try {
+    const store = await StoreFront.find({owner: req.params.id})
+    for (const id of store) {
+      console.log(id._id)
+    }
+    res.status(200).json(store)
+  } catch {
+    next(err)
+  }
+})
+
 // GET SPECIFIC {require token on this route for testing purpose}
 router.get('/admin/:id', async (req, res, next) => {
   try {
@@ -22,6 +35,8 @@ router.get('/admin/:id', async (req, res, next) => {
     next(err)
   }
 })
+
+
 
 // POST
 router.post('/admin', requireToken, async (req, res, next) => {

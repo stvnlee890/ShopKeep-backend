@@ -31,7 +31,7 @@ const s3 = new S3Client({
 const memoryStorage = multer.memoryStorage()
 const upload = multer({ storage: memoryStorage })
 
-// GET IMAGES WITH PRESIGNED URL
+// GET IMAGES ASSOCIATED TO STORE FRONT
 router.get('/:storeid', async (req, res) => {
   const posts = await ImageFile.find({storeFront: req.params.storeid})
 
@@ -46,6 +46,8 @@ router.get('/:storeid', async (req, res) => {
   }
   res.send(posts)
 })
+
+
 
 // POST TO AWS AND TO MONGODB
 router.post('/', upload.single('image'), async (req, res) => {
