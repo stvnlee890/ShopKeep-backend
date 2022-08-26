@@ -26,10 +26,20 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+// GET STORES WITH ID
+// router.get('/get/:id', async (req, res, next) => {
+//   try {
+//     const store = await StoreFront.findById(req.params.id)
+//     res.status(200).json(store)
+//   } catch {
+//     next(err)
+//   }
+// })
+
 // GET SPECIFIC {require token on this route for testing purpose}
 router.get('/admin/:id', async (req, res, next) => {
   try {
-    const store = await StoreFront.findById(req.params.id).populate('owner')
+    const store = await StoreFront.findById(req.params.id)
     res.status(200).json(store)
   } catch (err) {
     next(err)

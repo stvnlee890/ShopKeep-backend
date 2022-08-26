@@ -2,8 +2,9 @@ require('dotenv').config()
 const express = require('express');
 const router = express.Router();
 const ImageFile = require('../models/ImageFile');
+const StoreFront = require('../models/StoreFront')
 const multer = require('multer');
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
@@ -47,14 +48,51 @@ router.get('/:storeid', async (req, res) => {
   res.send(posts)
 })
 
+// DELETE IMAGE
+router.delete('/:id', async (req, res) => {
+  const image = await ImageFile.find({imageKey: req.params.id})
 
+  const imageKey = image[0].imageKey
+  if(!image) {
+    res.status(404).send("Image not found")
+  }
+    const params = {
+      Bucket: bucketName,
+      Key: imageKey
+    }
+    console.log(image.imageKey)
+
+  const command = new DeleteObjectCommand(params)
+  await s3.send(command)
+  
+  await ImageFile.findOneAndDelete({imageKey: req.params.id})
+  res.send(image)
+})
+
+// DELETE IMAGES AND STORE FRONT
+// FIND ALL IMAGES WITH STORE FRONT ID
+// SELECT ALL THOSE IMAGES AND GET EACH OF THEIR KEYS
+router.delete('/store-front/:id', async (req, res) => {
+  const image = await ImageFile.find({storeFront: req.params.id})
+  for (const key of image) {
+    const params = {
+      Bucket: bucketName,
+      Key: key.imageKey
+    }
+    const command = new DeleteObjectCommand(params)
+    await s3.send(command)
+  }
+  await ImageFile.deleteMany({storeFront: req.params.id})
+  await StoreFront.findByIdAndDelete(req.params.id)
+  res.send(image)
+
+})
 
 // POST TO AWS AND TO MONGODB
 router.post('/', upload.single('image'), async (req, res) => {
   console.log(req.file)
   console.log(req.body)
   
-
   const randomImageKey = randomName()
 
   const params = {
