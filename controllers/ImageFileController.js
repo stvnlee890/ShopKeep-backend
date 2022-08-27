@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const ImageFile = require('../models/ImageFile');
 const StoreFront = require('../models/StoreFront')
+const User = require('../models/User')
 const multer = require('multer');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
@@ -32,6 +33,7 @@ const s3 = new S3Client({
 const memoryStorage = multer.memoryStorage()
 const upload = multer({ storage: memoryStorage })
 
+
 // GET IMAGES ASSOCIATED TO STORE FRONT
 router.get('/:storeid', async (req, res) => {
   const posts = await ImageFile.find({storeFront: req.params.storeid})
@@ -46,6 +48,22 @@ router.get('/:storeid', async (req, res) => {
     post.imageUrl = url
   }
   res.send(posts)
+})
+
+// GET PROFILE IMAGE ASSOCIATED WITH USER ID
+router.get('/profile-image/:id', async (req, res) => {
+  const profileImage = await ImageFile.find({userProfile: req.params.id})
+  console.log(profileImage)
+  for (const image of profileImage) {
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: image.imageKey
+    }
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    image.imageUrl = url
+  }
+  res.send(profileImage)
 })
 
 // DELETE IMAGE
@@ -110,6 +128,28 @@ router.post('/', upload.single('image'), async (req, res) => {
    res.sendStatus(201)
 })
 
+// POST USER PROFILE IMAGE
+router.post('/profile-image', upload.single('image'), async(req, res) => {
+  console.log(req.file)
+  console.log(req.body)
+
+  const randomImageKey = randomName()
+
+  const params = {
+    Bucket: bucketName,
+    Key: randomImageKey,
+    Body: req.file.buffer,
+    ContenType: req.file.mimetype,
+  }
+
+  const command = new PutObjectCommand(params)
+  await s3.send(command)
+
+  const postImage = await ImageFile.create({...req.body, imageKey: randomImageKey })
+  const populate = await postImage.populate('userProfile')
+  res.sendStatus(201)
+
+})
 
 
 //============= TEST ROUTE CODE ==============///
