@@ -47,6 +47,21 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
+router.put('/favorite/:id', async (req, res, next) => {
+  try {
+    const editUser = await User.findByIdAndUpdate({ _id: req.params.id }, { $push: req.body }, {
+      new: true,
+    })
+    if(editUser) {
+      res.json(editUser)
+    } else {
+      res.sendStatus(404)
+    }
+  } catch(err) {
+    next(err)
+  }
+})
+
 // POST NEW USER with hashed pw
 router.post('/signup', async (req, res, next) => {
   try {

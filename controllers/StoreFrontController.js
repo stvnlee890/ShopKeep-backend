@@ -63,7 +63,7 @@ router.post('/admin', requireToken, async (req, res, next) => {
 // FOR NOW DON'T REQUIRE TOKEN
 router.put('/admin/:id', async (req, res, next) => {
   try {
-    const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, req.body, {
+    const editStore = await StoreFront.findByIdAndUpdate({ _id: req.params.id }, { $push: req.body }, {
       new: true,
     })
     if(editStore) {

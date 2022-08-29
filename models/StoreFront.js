@@ -11,11 +11,15 @@ const StoreFrontSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  size: String,
   condition: String,
   color: String,
   description: String,
   category: String,
   username: String,
+  // favorite: [{
+  //   type: String,
+  // }],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

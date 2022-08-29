@@ -23,6 +23,9 @@ const UserSchema = mongoose.Schema({
   },
   profileImage: String,
   isAdmin: Boolean,
+  favorite: [{
+    type: String,
+  }],
 },
 {
   timestamps: true,
