@@ -37,7 +37,7 @@ const upload = multer({ storage: memoryStorage })
 // GET IMAGES ASSOCIATED TO STORE FRONT
 router.get('/:storeid', async (req, res) => {
   const posts = await ImageFile.find({storeFront: req.params.storeid})
-
+  console.log(req.params.storeid)
   for (const post of posts) {
     const getObjectParams = {
       Bucket: bucketName,
@@ -48,6 +48,23 @@ router.get('/:storeid', async (req, res) => {
     post.imageUrl = url
   }
   res.send(posts)
+})
+router.get('/favorite/', async (req, res) => {
+    console.log(params)
+    const posts = await ImageFile.find({storeFront: req.params})
+    console.log(posts)
+
+
+  // for (const post of storeFront) {
+  //   const getObjectParams = {
+  //     Bucket: bucketName,
+  //     Key: post.imageKey
+  //   }
+  //   const command = new GetObjectCommand(getObjectParams);
+  //   const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  //   post.imageUrl = url
+  // }
+  // res.send(posts)
 })
 
 // GET PROFILE IMAGE ASSOCIATED WITH USER ID

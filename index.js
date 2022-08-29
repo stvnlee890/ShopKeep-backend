@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 // CONTROLLERS
+
 const storeFrontController = require('./controllers/StoreFrontController');
 app.use('/store-front', storeFrontController)
 
@@ -25,6 +26,9 @@ app.use('/images', ImageFileController)
 
 const UserController = require('./controllers/UserController');
 app.use('/user', UserController)
+
+const FavoriteController = require('./controllers/FavoriteController');
+app.use('/favorite', FavoriteController)
 
 // SERVER
 app.listen(app.get('port'), () => {

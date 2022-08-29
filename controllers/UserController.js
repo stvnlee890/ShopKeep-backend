@@ -47,9 +47,9 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
-router.put('/favorite/:id', async (req, res, next) => {
+router.put('/favorite/:username', async (req, res, next) => {
   try {
-    const editUser = await User.findByIdAndUpdate({ _id: req.params.id }, { $push: req.body }, {
+    const editUser = await User.findOneAndUpdate({ username: req.params.username }, { $push: req.body }, {
       new: true,
     })
     if(editUser) {
