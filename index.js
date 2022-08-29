@@ -2,11 +2,11 @@ const cors = require('cors');
 const express = require('express');
 
 
-// INSTANTIATE APP
 const app = express();
+// INSTANTIATE APP
+app.use(cors())
 app.set('port', process.env.PORT || 8080);
 
-app.use(cors())
 // MIDDLEWARE
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
