@@ -1,13 +1,13 @@
-const express = require('express');
 const cors = require('cors');
+const express = require('express');
 
 
 // INSTANTIATE APP
 const app = express();
 app.set('port', process.env.PORT || 8080);
 
-// MIDDLEWARE
 app.use(cors())
+// MIDDLEWARE
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
