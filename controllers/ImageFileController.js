@@ -120,6 +120,7 @@ router.delete('/store-front/:id', async (req, res) => {
   }
   await ImageFile.deleteMany({storeFront: req.params.id})
   await StoreFront.findByIdAndDelete(req.params.id)
+  await Favorite.findOneAndDelete({ storeFront: req.params.id })
   res.send(image)
 
 })

@@ -14,4 +14,14 @@ router.post('/', async(req, res, next) => {
   }
 });
 
+// DELETE FAVORITE  
+router.delete('/:id', async (req, res, next) => {
+  try {
+    console.log(req.params.id)
+    const deleteFavorite = await Favorite.findByIdAndDelete(req.params.id)
+    res.json(deleteFavorite)
+  } catch(err) {
+    next(err)
+  }
+})
 module.exports = router
