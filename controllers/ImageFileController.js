@@ -4,10 +4,12 @@ const router = express.Router();
 const ImageFile = require('../models/ImageFile');
 const StoreFront = require('../models/StoreFront')
 const User = require('../models/User')
+const Favorite = require('../models/Favorite')
 const multer = require('multer');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { resolveSoa } = require('dns');
 
 // GET
 
@@ -37,7 +39,7 @@ const upload = multer({ storage: memoryStorage })
 // GET IMAGES ASSOCIATED TO STORE FRONT
 router.get('/:storeid', async (req, res) => {
   const posts = await ImageFile.find({storeFront: req.params.storeid})
-  console.log(req.params.storeid)
+
   for (const post of posts) {
     const getObjectParams = {
       Bucket: bucketName,
@@ -49,22 +51,21 @@ router.get('/:storeid', async (req, res) => {
   }
   res.send(posts)
 })
-router.get('/favorite/', async (req, res) => {
-    console.log(params)
-    const posts = await ImageFile.find({storeFront: req.params})
-    console.log(posts)
 
+// GET ALL FAVORITE STORE FRONTS AND THEIR IMAGE KEYS
+router.get('/favorite/:username', async (req, res) => {
+  const getFavorite = await Favorite.find({username: req.params.username  })
 
-  // for (const post of storeFront) {
-  //   const getObjectParams = {
-  //     Bucket: bucketName,
-  //     Key: post.imageKey
-  //   }
-  //   const command = new GetObjectCommand(getObjectParams);
-  //   const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-  //   post.imageUrl = url
-  // }
-  // res.send(posts)
+  for (const key of getFavorite) {
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: key.imageKey
+    }
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    key.imageUrl = url
+  }
+  res.send(getFavorite)
 })
 
 // GET PROFILE IMAGE ASSOCIATED WITH USER ID
@@ -122,6 +123,23 @@ router.delete('/store-front/:id', async (req, res) => {
   res.send(image)
 
 })
+
+// POST WITH IMAGE URL TO FAVORITE
+// router.post('/favorite', async (req, res) => {
+//   const createFav = await Favorite.create(req.body)
+//   console.log(req.body)
+ 
+//     const getObjectParams = {
+//       Bucket: bucketName,
+//       Key: req.body.imageKey
+//     }
+//     const command = new GetObjectCommand(getObjectParams);
+//     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+//     createFav.imageUrl = url
+//     createFav.imageKey = req.body.imageKey
+  
+//   res.send(createFav)
+// })
 
 // POST TO AWS AND TO MONGODB
 router.post('/', upload.single('image'), async (req, res) => {

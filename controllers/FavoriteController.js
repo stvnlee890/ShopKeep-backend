@@ -8,7 +8,6 @@ const Favorite = require('../models/Favorite');
 router.post('/', async(req, res, next) => {
   try {
     const newFavorite = await Favorite.create(req.body)
-    const populate = await newFavorite.populate('storeFront')
     res.status(201).json(newFavorite)
   } catch (err) {
     next(err);
