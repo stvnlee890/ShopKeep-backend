@@ -125,24 +125,7 @@ router.delete('/store-front/:id', async (req, res) => {
 
 })
 
-// POST WITH IMAGE URL TO FAVORITE
-// router.post('/favorite', async (req, res) => {
-//   const createFav = await Favorite.create(req.body)
-//   console.log(req.body)
- 
-//     const getObjectParams = {
-//       Bucket: bucketName,
-//       Key: req.body.imageKey
-//     }
-//     const command = new GetObjectCommand(getObjectParams);
-//     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-//     createFav.imageUrl = url
-//     createFav.imageKey = req.body.imageKey
-  
-//   res.send(createFav)
-// })
-
-// POST TO AWS AND TO MONGODB
+// POST IMAGE AND SEND IMAGE SCHEMA WITH IMAGEKEY TO MONGODB
 router.post('/', upload.single('image'), async (req, res) => {
   console.log(req.file)
   console.log(req.body)
@@ -187,61 +170,5 @@ router.post('/profile-image', upload.single('image'), async(req, res) => {
 
 })
 
-
-//============= TEST ROUTE CODE ==============///
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const images = await ImageFile.find({}).populate('storeFront')
-//     res.status(200).json(images)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// // GET BY ID
-// router.get('/:id', async (req, res, next) => {
-//   try {
-//     const images = await ImageFile.findById(req.params.id).populate('storeFront')
-//     res.status(200).json(images)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// // POST
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const newImage = await (await ImageFile.create(req.body));
-//     res.status(201).json(newImage)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// // PUT
-// router.put('/:id', async (req, res, next) => {
-//   try {
-//     const editImage = await ImageFile.findByIdAndUpdate({ _id: req.params.id }, req.body, {
-//       new: true,
-//     })
-//     if(editImage) {
-//       res.json(editImage)
-//     } else {
-//       res.sendStatus(404)
-//     }
-//   } catch(err) {
-//     next(err)
-//   }
-// })
-
-// // DELETE
-// router.delete('/:id', async (req, res, next) => {
-//   try {
-//     const deleteImage = await ImageFile.findByIdAndDelete(req.params.id)
-//     res.status(204).json(deleteImage)
-//   } catch(err) {
-//     next(err)
-//   }
-// })
 
 module.exports = router
