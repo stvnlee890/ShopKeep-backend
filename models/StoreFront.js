@@ -17,9 +17,6 @@ const StoreFrontSchema = new mongoose.Schema({
   description: String,
   category: String,
   username: String,
-  // favorite: [{
-  //   type: String,
-  // }],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
