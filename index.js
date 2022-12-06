@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to Home page')
 });
 
-// CONTROLLERS s
+// CONTROLLERS 
 
 const storeFrontController = require('./controllers/StoreFrontController');
 app.use('/store-front', storeFrontController)
